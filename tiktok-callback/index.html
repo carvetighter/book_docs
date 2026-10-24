@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>TikTok Login — QK Allen Book Poster</title>
+  <style>
+    :root { --bg: #1F2A44; --fg: #F4EBD9; --accent: #D4A84B; --muted: #9AA3B8; }
+    body { margin: 0; padding: 32px 16px; background: var(--bg); color: var(--fg);
+           font: 16px/1.5 system-ui, sans-serif; }
+    main { max-width: 640px; margin: 0 auto; }
+    h1 { color: var(--accent); font-size: 1.5rem; }
+    code { display: block; padding: 12px; margin: 12px 0; background: #00000040;
+           border-radius: 6px; word-break: break-all; }
+    button { background: var(--accent); color: var(--bg); border: 0; border-radius: 6px;
+             padding: 8px 16px; font-weight: 600; cursor: pointer; }
+    p.muted { color: var(--muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>TikTok login</h1>
+  <p id="status">Forwarding to the local login listener…</p>
+  <div id="manual" hidden>
+    <p>If nothing happened, copy this full address and paste it into the terminal that is waiting for it:</p>
+    <code id="url"></code>
+    <button id="copy" type="button">Copy</button>
+  </div>
+  <p class="muted">This page only forwards the login response to the app running on the owner's own computer
+    (127.0.0.1). It stores nothing.</p>
+</main>
+<script>
+  (function () {
+    var params = window.location.search;
+    var status = document.getElementById("status");
+    var local = "http://127.0.0.1:8765/callback" + params;
+
+    if (!params) {
+      status.textContent = "No login response found on this page.";
+      return;
+    }
+    var q = new URLSearchParams(params);
+    if (q.get("error")) {
+      status.textContent = "TikTok returned an error: " + (q.get("error_description") || q.get("error"));
+    }
+
+    document.getElementById("url").textContent = window.location.href;
+    document.getElementById("copy").addEventListener("click", function () {
+      navigator.clipboard.writeText(window.location.href);
+      this.textContent = "Copied";
+    });
+    setTimeout(function () { document.getElementById("manual").hidden = false; }, 1500);
+    window.location.replace(local);
+  })();
+</script>
+</body>
+</html>
